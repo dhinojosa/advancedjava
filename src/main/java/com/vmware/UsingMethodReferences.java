@@ -38,13 +38,19 @@ public class UsingMethodReferences {
                 Lists.newArrayList(3,5,6),
                 Lists.newArrayList(7,8)
         );
+        
+        System.out.println(
+                streams.<Integer>flatMap(lst ->
+                        lst.stream().map(i -> i * 20))
+                        .filter(j -> j % 3 == 0)
+                        .collect(Collectors.<Integer>summingInt(value -> value)));
 
         
         System.out.println(
                 streams.<Integer>flatMap(lst ->
                         lst.stream().map(i -> i * 20))
                         .filter(j -> j % 3 == 0)
-                        .map(x -> "" + x)
+                        .map(Object::toString)
                         .collect(Collectors.joining(":", "{", "}")));
         
         Arrays.<Number>asList(1, 2, 3, 4, 5);
