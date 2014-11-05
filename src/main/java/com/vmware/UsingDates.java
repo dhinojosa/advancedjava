@@ -11,6 +11,11 @@ import java.util.Locale;
 import static java.time.temporal.ChronoUnit.*;
 
 public class UsingDates {
+
+    static {
+        System.out.println("Loading the class");
+    }
+
     public static void main(String[] args) {
         Date date = new java.util.Date();
         System.out.println(date.getYear() + 1900);
@@ -69,5 +74,9 @@ public class UsingDates {
                         .withLocale(Locale.CHINA);
         longDateTimeFormatter.getLocale(); //fr
         System.out.println(longDateTimeFormatter.format(zonedDateTime));
+    }
+
+    static {
+        System.out.println("Loaded the class");
     }
 }
