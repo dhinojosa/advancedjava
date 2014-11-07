@@ -18,7 +18,7 @@ public class FaultToleranceActorTest {
                 Props.create(ParentActor.class),
                        "parentactor"); // this will stored in the url /user/askactor
 
-        reporterActorRef.tell("go", system.deadLetters());
+        reporterActorRef.tell("go", reporterActorRef);
 
         Thread.sleep(15000);
         system.shutdown();

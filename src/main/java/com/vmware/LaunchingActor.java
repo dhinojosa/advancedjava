@@ -17,7 +17,8 @@ public class LaunchingActor extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {
-       if (message.equals("go")) {
+        log.info("path = {}, message = {}", getSender().path(), message.toString());
+        if (message.equals("go")) {
            ActorSelection selection =
                    context().actorSelection("/user/parentactor");
 
@@ -30,7 +31,7 @@ public class LaunchingActor extends UntypedActor {
                    log.debug("Successful result");
                    if (result instanceof ActorRef) {
                        ActorRef child = (ActorRef) result;
-                       child.tell("null", self());
+                       child.tell("illegal_argument", self());
                    }
                }
            }, context().dispatcher());

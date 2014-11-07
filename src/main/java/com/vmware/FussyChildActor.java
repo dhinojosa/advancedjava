@@ -23,8 +23,16 @@ public class FussyChildActor extends UntypedActor {
     }
 
     @Override
+    public void postStop() throws Exception {
+        super.postStop();
+        log.debug("actor-stopped");
+    }
+
+    @Override
     public void onReceive(Object message) throws Exception {
-         if(message.equals("illegal_argument")) {
+        log.info("path = {}, message = {}", getSender().path(), message.toString());
+        if(message.equals("illegal_argument")) {
+             log.debug("throwing an illegal argument exception");
              throw new IllegalArgumentException("I want candy!");
          } else if (message.equals("arithmetic")) {
              throw new ArithmeticException("I hate math!");
