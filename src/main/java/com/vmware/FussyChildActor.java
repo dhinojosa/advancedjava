@@ -9,6 +9,7 @@ public class FussyChildActor extends UntypedActor {
 
     LoggingAdapter log = Logging.getLogger(context().system(), this);
 
+
     @Override
     public void preRestart(Throwable reason, Option<Object> message) throws Exception {
         super.preRestart(reason, message);
