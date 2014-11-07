@@ -19,17 +19,9 @@ public class RoutingActorTest {
         ActorRef actorRef = system.actorOf(FromConfig.getInstance()
                         .props(Props.create(SimpleActor.class)), "my-router");
 
-        actorRef.tell("go", system.deadLetters());
-        actorRef.tell("go1", system.deadLetters());
-        actorRef.tell("go2", system.deadLetters());
-        actorRef.tell("go3", system.deadLetters());
-        actorRef.tell("go4", system.deadLetters());
-        actorRef.tell("go5", system.deadLetters());
-        actorRef.tell("go6", system.deadLetters());
-        actorRef.tell("go7", system.deadLetters());
-        actorRef.tell("go8", system.deadLetters());
-        actorRef.tell("go9", system.deadLetters());
-        actorRef.tell("go10", system.deadLetters());
+        for (int i = 0; i < 1000; i++) {
+            actorRef.tell("go" + i, system.deadLetters());
+        }
 
         Thread.sleep(15000);
         system.shutdown();
