@@ -24,9 +24,11 @@ public class ReporterActor extends UntypedActor {
            future.onSuccess(new OnSuccess<Object>() {
                @Override
                public void onSuccess(Object result) throws Throwable {
-                    log.info("Received Result: {}", result);
+                   log.info("Received Result: {}", result);
                }
            }, context().dispatcher());
+       } else {
+           unhandled(message);
        }
     }
 }
