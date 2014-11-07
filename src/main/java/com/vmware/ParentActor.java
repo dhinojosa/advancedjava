@@ -6,8 +6,6 @@ import scala.concurrent.duration.Duration;
 
 import java.util.concurrent.TimeUnit;
 
-import static akka.actor.SupervisorStrategy.*;
-
 public class ParentActor extends UntypedActor {
 
     private static SupervisorStrategy strategy =
@@ -16,13 +14,13 @@ public class ParentActor extends UntypedActor {
                         @Override
                         public SupervisorStrategy.Directive apply(Throwable t) {
                             if (t instanceof ArithmeticException) {
-                                return resume();
+                                return SupervisorStrategy.resume();
                             } else if (t instanceof NullPointerException) {
-                                return restart();
+                                return SupervisorStrategy.restart();
                             } else if (t instanceof IllegalArgumentException) {
-                                return stop();
+                                return SupervisorStrategy.stop();
                             } else {
-                                return escalate();
+                                return SupervisorStrategy.escalate();
                             }
                         }
                     });

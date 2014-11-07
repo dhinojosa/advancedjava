@@ -20,6 +20,7 @@ public class LaunchingActor extends UntypedActor {
        if (message.equals("go")) {
            ActorSelection selection =
                    context().actorSelection("/user/parentactor");
+
            Future<Object> future = ask(selection,
                                Props.create(FussyChildActor.class), 15000);
 
