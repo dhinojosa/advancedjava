@@ -1,8 +1,12 @@
 package com.vmware;
 
 import akka.actor.*;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 
 public class SimpleActor extends UntypedActor {
+
+    LoggingAdapter log = Logging.getLogger(context().system(), this);
 
     public SimpleActor() {
         System.out.println("Created Actor");
@@ -10,7 +14,7 @@ public class SimpleActor extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {
-        System.out.format("Message Received in %s: %s\n", Thread.currentThread().getName(), message);
+        log.info("Message Received: {}", message);
     }
 
     public static void main(String[] args) throws InterruptedException {

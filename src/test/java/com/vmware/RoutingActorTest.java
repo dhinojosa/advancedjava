@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.FromConfig;
+import akka.routing.RouterConfig;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.junit.Test;
@@ -12,13 +13,15 @@ public class RoutingActorTest {
 
     @Test
     public void testRouterActor() throws InterruptedException {
-        Config config = ConfigFactory.load("routing-system");
+        Config config = ConfigFactory.load();
 
-        ActorSystem system = ActorSystem.create("MySystem", config);
+        Config routerConfig = ConfigFactory.load("routing-system")
+                .withFallback(config);
+
+        ActorSystem system = ActorSystem.create("MySystem", routerConfig);
 
         ActorRef actorRef = system.actorOf(FromConfig.getInstance()
-                .props(Props.create(SimpleActor.class)),
-                "my-router");
+                        .props(Props.create(SimpleActor.class)), "my-router");
 
         actorRef.tell("go", system.deadLetters());
         actorRef.tell("go1", system.deadLetters());
