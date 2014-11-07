@@ -13,12 +13,8 @@ public class RoutingActorTest {
 
     @Test
     public void testRouterActor() throws InterruptedException {
-        Config config = ConfigFactory.load();
 
-        Config routerConfig = ConfigFactory.load("routing-system")
-                .withFallback(config);
-
-        ActorSystem system = ActorSystem.create("MySystem", routerConfig);
+        ActorSystem system = ActorSystem.create("MySystem");
 
         ActorRef actorRef = system.actorOf(FromConfig.getInstance()
                         .props(Props.create(SimpleActor.class)), "my-router");
