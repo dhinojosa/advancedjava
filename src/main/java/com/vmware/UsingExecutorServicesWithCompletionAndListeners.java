@@ -6,13 +6,20 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 
 public class UsingExecutorServicesWithCompletionAndListeners {
 	
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		ExecutorService executorService = Executors.newWorkStealingPool(2);
-		ExecutorCompletionService<Integer> executorCompletionService = 
-				new ExecutorCompletionService<>(executorService);
+		ListeningExecutorService listeningExecutorService = 
+				MoreExecutors.listeningDecorator(executorService); 
 		
 		Callable<Integer> callable = new Callable<Integer>() {
 			@Override
@@ -23,18 +30,26 @@ public class UsingExecutorServicesWithCompletionAndListeners {
 			}		   	
 		};
 		
-		Future<Integer> fi0 = executorCompletionService.submit(callable);
-		Future<Integer> fi1 = executorCompletionService.submit(callable);
-		Future<Integer> fi2 = executorCompletionService.submit(callable);
-
-		for (int i = 0; i < 3; i++) {
-			Future f = executorCompletionService.take();
-			System.out.println(f.get());
-		}
+		ListenableFuture<Integer> f = listeningExecutorService.submit(callable);
 		
-		System.out.println("-----");
-		System.out.println(fi0.get());
-		System.out.println(fi1.get());
-		System.out.println(fi2.get());
+		Futures.addCallback(f, new FutureCallback<Integer>() {
+			@Override
+			public void onSuccess(Integer result) {
+				System.out.println("Hooray the answer is" + result);
+			}
+
+			@Override
+			public void onFailure(Throwable t) {
+				System.out.println("Boom!");
+				t.printStackTrace();
+			}		
+		});
+		
+//		Thread.sleep(10000);
+		
+//		System.out.println("The answer should still be"  + f.get());
+		listeningExecutorService.shutdown();
+
+		listeningExecutorService.awaitTermination(50, TimeUnit.MINUTES);
 	}
 }
